@@ -59,6 +59,7 @@ app.post('/saveUser' , routes.newUser);
 app.post('/checkLogin' , routes.checkLogin);
 app.post('/newGame' , routes.newGame);
 app.post('/checkSelect' , routes.checkSelect);
+app.post('/rank' , routes.rank);
 
 
 app.listen(8585, function () {

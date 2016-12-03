@@ -28,6 +28,7 @@ $(document).ready(function(){
 					if(data.isOk){
 						if(data.isComplete === true){
 							$("#player_level").text("مرحله " + data.level);
+							engToPersian();
 							
 							resetGame();
 							//console.log(data.board);
@@ -55,7 +56,7 @@ $(document).ready(function(){
 								width: (Math.min($(this).data("origWidth") + xx , 100)) + "%"
 							}, 500);
 					});
-					paintArray(game.board);
+					//paintArray(game.board);
 				}
 			});
 
@@ -110,30 +111,6 @@ $(document).ready(function(){
 ;(function($) {
     $(function() {
         $('#logout_btn').bind('click', function(e) {
-			/*var msg = "شما با موفقیت خارج شدید!";
-			x = 15;
-			y = 0;
-
-			$(".meter > span").each(function() {
-				$(this)
-					.stop()
-					.data("origWidth", $(this).width() / $(this).parent().width() * 100)
-					.animate({
-						width: (75) + "%"
-					}, 100);
-			});
-
-            $('.mypopup_message > p').text(msg);
-			$('#message').bPopup({
-                speed: 600,
-                transition: 'slideUp',
-                transitionClose: 'slideDown'
-            });
-
-			$("#player_name").text("رضا شیری");
-			$("#player_level").text("مرحله 1");
-			$("#top_nav2").hide();
-			$("#top_nav").show();*/
 			location.reload();
         });
     });
@@ -142,6 +119,46 @@ $(document).ready(function(){
 ;(function($) {
     $(function() {
         $('.rank_btn').bind('click', function(e) {
+			data = {};
+			$.ajax({
+				type: 'POST',
+				data: JSON.stringify(data),
+				contentType: 'application/json',
+				url: '/rank',
+				success: function(data) {
+					$("#rank_1 #rank").html(data[0].rank);
+					$("#rank_1 #rank_name").html(data[0].name);
+					$("#rank_1 #rank_level").html(data[0].level);
+
+					if(data.length > 1){
+						$("#rank_2 #rank").html(data[1].rank);
+						$("#rank_2 #rank_name").html(data[1].name);
+						$("#rank_2 #rank_level").html(data[1].level);
+					}
+
+					if(data.length > 2){
+						$("#rank_3 #rank").html(data[2].rank);
+						$("#rank_3 #rank_name").html(data[2].name);
+						$("#rank_3 #rank_level").html(data[2].level);
+					}
+
+					if(data.length > 3){
+						$("#rank_4 #rank").html(data[3].rank);
+						$("#rank_4 #rank_name").html(data[3].name);
+						$("#rank_4 #rank_level").html(data[3].level);
+					}
+
+					if(data.length > 4){
+						$("#rank_5 #rank").html(data[4].rank);
+						$("#rank_5 #rank_name").html(data[4].name);
+						$("#rank_5 #rank_level").html(data[4].level);
+					}
+
+					engToPersian();
+				}
+			});
+
+
             $('#div_rank').bPopup({
                 speed: 600,
                 transition: 'slideUp',
@@ -226,18 +243,30 @@ var checkLogin = function() {
 				contentType: 'application/json',
 				url: '/newGame',
 				success: function(data) {
-					game = data.game;
-					x = 0;
-					y = 1;
-					$(".meter > span").each(function() {
-						$(this)
-							.stop()
-							.data("origWidth", $(this).width() / $(this).parent().width() * 100)
-							.animate({
-								width: (95) + "%"
-							}, 50);
-					});
-					paintArray(game.board);
+					if(data.isOk){
+						resetGame();
+						game = data.game;
+						x = 0;
+						y = 1;
+						$(".meter > span").each(function() {
+							$(this)
+								.stop()
+								.data("origWidth", $(this).width() / $(this).parent().width() * 100)
+								.animate({
+									width: (95) + "%"
+								}, 50);
+						});
+						paintArray(game.board);
+					}else{
+						resetGame();
+						var msg = data.message;
+						$('.mypopup_message > p').text(msg);
+						$('#message').bPopup({
+							speed: 600,
+							transition: 'slideUp',
+							transitionClose: 'slideDown'
+						});
+					}
 				}
 			});
         });
@@ -278,6 +307,22 @@ $(document).ready(function(){
     traverse(document.body);
 });
 
+var engToPersian = function(){
+    persian={0:'۰',1:'۱',2:'۲',3:'۳',4:'۴',5:'۵',6:'۶',7:'۷',8:'۸',9:'۹'};
+	function traverse(el){
+		if(el.nodeType==3){
+			var list=el.data.match(/[0-9]/g);
+			if(list!=null && list.length!=0){
+				for(var i=0;i<list.length;i++)
+					el.data=el.data.replace(list[i],persian[list[i]]);
+			}
+		}
+		for(var i=0;i<el.childNodes.length;i++){
+			traverse(el.childNodes[i]);
+		}
+	}
+    traverse(document.body);
+}
 
 var paintArray = function(arr){
 	for(var i = 0 ; i < arr.length ; ++i){
@@ -287,7 +332,7 @@ var paintArray = function(arr){
 	setTimeout(function() {   //calls click event after a certain time
 		resetGame();
 	} , 3000);
-	while(arr.length) {
+	while(arr.length > 0) {
 		arr.pop();
 	}
 }

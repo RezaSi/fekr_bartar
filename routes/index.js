@@ -65,7 +65,7 @@ exports.newGame = function (req, res) {
 		if(users.length != 0){
 			mongoose.model("games").find({studentId: req.body.studentId} , function(err , games){
 				if(games.length > 4){
-					data.isOk = "false";
+					data.isOk = false;
 					data.message = "شما حداکثر تعداد بازی خود را انجام داده اید!";
 					res.send(data);
 				}else{
@@ -106,8 +106,9 @@ exports.checkSelect = function (req, res) {
 			user_ = users[0];
 			mongoose.model("games").find({} , function(err , games){
 				if(games[games.length - 1].isOver === 1){
+					
 					data.isOk = false;
-					data.message = "این بازی تمام شده است!";
+					data.message = "این بازی تمام شده است! ... برای شروع بازی جدید روی شروع بازی کلیک کنید!";
 					res.send(data);
 				}else{
 					//game not over;
@@ -154,6 +155,26 @@ exports.checkSelect = function (req, res) {
 					}else{
 						data.isOk = false;
 						data.message = "خانه اشتباه انتخاب کردی! ... باختی :'(";
+
+						mongoose.model("games").update({
+							studentId: user_.studentId , 
+							gameId: games[games.length - 1].gameId}, 
+							{
+								$set: {isOver: 1}
+							} , function(err , product){
+							if(err) console.log(err);
+							console.log(product);
+						});
+
+						mongoose.model("users").update(
+							{studentId: req.body.studentId , password: req.body.password}, 
+							{
+								$set: {level: games[games.length - 1].level}
+							} , function(err , product){
+							if(err) console.log(err);
+							console.log(product);
+						});
+
 						res.send(data);
 					}
 				}
@@ -163,6 +184,18 @@ exports.checkSelect = function (req, res) {
 			data.message = "چنین کاربری پیدا نشد!";
 			res.send(data);
 		}
+	});
+}
+
+exports.rank = function (req, res) {
+	var rank_users = [];
+
+	mongoose.model("users").find().sort([['level', 'descending']]).exec(function (err , users) {
+		for(var i = 0 ; i < users.length; ++i){
+			rank_users[i] = {rank: (i + 1) , studentId: users[i].studentId , name: users[i].name , level: users[i].level};
+		}
+		console.log(rank_users);
+		res.send(rank_users);
 	});
 }
 
