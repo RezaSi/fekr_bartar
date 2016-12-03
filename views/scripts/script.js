@@ -51,7 +51,6 @@ $(document).ready(function(){
 					}
 
 
-
 					var xx = 5;
 					$(".meter > span").each(function() {
 						$(this)
@@ -166,16 +165,20 @@ $(document).ready(function(){
 						$("#rank_me").hide();
 					}else{
 						var flag = false;
+						console.log(data);
 						for(var i = 0 ; i < Math.min(data.length , 5) ; ++i){
 							if(data[i].studentId === user.studentId){
 								$("#rank_" + (i + 1)).css("color" , "green");
 								flag = true;
+								//console.log(i);
 							}
 						}
-						if(flag){
+						if(flag === true){
 							 $(".3noghte").hide();
 							 $("#rank_me").hide();
 						}else{
+							$(".3noghte").show();
+							 $("#rank_me").show();
 							for(var i = 0 ; i < data.length ; ++i){
 								if(data[i].studentId === user.studentId){
 									$("#rank_me #rank").html(data[i].rank);
