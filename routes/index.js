@@ -75,7 +75,7 @@ exports.newGame = function (req, res) {
 					newGame.save(function(err , product){
 						if(err){
 							data.isOk = "false";
-							console.log("error , game cant create!" + err);
+							//console.log("error , game cant create!" + err);
 							res.send(data);
 						}else{
 							//console.log(product);
@@ -98,7 +98,7 @@ exports.newGame = function (req, res) {
 
 exports.checkSelect = function (req, res) {
 	var blockIndex = req.body.blockIndex;
-	console.log(req.body);
+	//console.log(req.body);
 
 	mongoose.model("users").find({studentId: req.body.studentId , password: req.body.password} , function(err , users){
 		data = {};
