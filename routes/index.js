@@ -13,7 +13,7 @@ exports.index = function (req, res) {
 
 exports.users = function (req, res) {
 	mongoose.model("users").find(function(err , users){
-		console.log(users);
+		//console.log(users);
 		res.send(users);
 	});
 }
@@ -23,14 +23,14 @@ exports.newUser = function (req, res) {
 
 	mongoose.model("users").find({studentId: newUser.studentId} , function(err , users){
 		if(users.length != 0){
-			console.log("registered before!");
+			//console.log("registered before!");
 			res.send("این شماره دانشجویی قبلا ثبت شده است!");
 		}else{
 			newUser.save(function(err){
 				if(err){
 					console.log("error , user not saved!");
 				}else{
-					console.log("saved success!");
+					//console.log("saved success!");
 					res.send("ثبت نام شما با موفقیت انجام شد!");
 				}
 			});
@@ -78,10 +78,10 @@ exports.newGame = function (req, res) {
 							console.log("error , game cant create!" + err);
 							res.send(data);
 						}else{
-							console.log(product);
+							//console.log(product);
 							data.isOk = "true";
 							data.message = "بازی با موفقیت ایجاد شد!";
-							console.log("newGame Created!");
+							//console.log("newGame Created!");
 							data.game = {studentId: req.body.studentId , board: [rnd] , gameId: product._id.toString()};
 							res.send(data);
 						}
@@ -113,7 +113,7 @@ exports.checkSelect = function (req, res) {
 				}else{
 					//game not over;
 
-					console.log(games[games.length - 1].board + " " + req.body.blockIndex);
+					//console.log(games[games.length - 1].board + " " + req.body.blockIndex);
 					var indexI = games[games.length - 1].board.indexOf(req.body.blockIndex);
 
 					if(indexI > -1){
@@ -126,7 +126,7 @@ exports.checkSelect = function (req, res) {
 							data.level = games[games.length - 1].level;
 							//generate new random game with length level + 1 . .. . .. .
 							var newBoard = [];
-							for(var i = 0 ; i < games[games.length - 1].level ; ++i){
+							for(var i = 0 ; i < Math.min(games[games.length - 1].level , 15) ; ++i){
 								var rnd = randomInt(0 , 24);
 								if(newBoard.indexOf(rnd) === -1){
 									newBoard[newBoard.length] = rnd;
@@ -149,7 +149,7 @@ exports.checkSelect = function (req, res) {
 								}
 							} , function(err , product){
 							if(err) console.log(err);
-							console.log(product);
+							//console.log(product);
 						});
 						res.send(data);
 					}else{
@@ -163,7 +163,7 @@ exports.checkSelect = function (req, res) {
 								$set: {isOver: 1}
 							} , function(err , product){
 							if(err) console.log(err);
-							console.log(product);
+							//console.log(product);
 						});
 
 						mongoose.model("users").update(
@@ -172,7 +172,7 @@ exports.checkSelect = function (req, res) {
 								$set: {level: games[games.length - 1].level}
 							} , function(err , product){
 							if(err) console.log(err);
-							console.log(product);
+							//console.log(product);
 						});
 
 						res.send(data);
@@ -194,7 +194,7 @@ exports.rank = function (req, res) {
 		for(var i = 0 ; i < users.length; ++i){
 			rank_users[i] = {rank: (i + 1) , studentId: users[i].studentId , name: users[i].name , level: users[i].level};
 		}
-		console.log(rank_users);
+		//console.log(rank_users);
 		res.send(rank_users);
 	});
 }

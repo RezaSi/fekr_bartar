@@ -24,10 +24,14 @@ $(document).ready(function(){
 				contentType: 'application/json',
 				url: '/checkSelect',
 				success: function(data) {
-					console.log(JSON.stringify(data));
+					//console.log(JSON.stringify(data));
 					if(data.isOk){
 						if(data.isComplete === true){
 							$("#player_level").text("مرحله " + data.level);
+
+        					$("#player_level").animate({fontSize: "30px" , opacity: '0.7'}, "slow");
+							$("#player_level").animate({fontSize: "20px" , opacity: '1'}, "slow");
+
 							engToPersian();
 							
 							resetGame();
@@ -36,6 +40,7 @@ $(document).ready(function(){
 						}
 					}else{
 						//gameOver!
+						resetGame();
 						var msg = data.message;
 						$('.mypopup_message > p').text(msg);
 						$('#message').bPopup({
@@ -126,9 +131,11 @@ $(document).ready(function(){
 				contentType: 'application/json',
 				url: '/rank',
 				success: function(data) {
-					$("#rank_1 #rank").html(data[0].rank);
-					$("#rank_1 #rank_name").html(data[0].name);
-					$("#rank_1 #rank_level").html(data[0].level);
+					if(data.length > 0){
+						$("#rank_1 #rank").html(data[0].rank);
+						$("#rank_1 #rank_name").html(data[0].name);
+						$("#rank_1 #rank_level").html(data[0].level);
+					}
 
 					if(data.length > 1){
 						$("#rank_2 #rank").html(data[1].rank);
@@ -152,6 +159,32 @@ $(document).ready(function(){
 						$("#rank_5 #rank").html(data[4].rank);
 						$("#rank_5 #rank_name").html(data[4].name);
 						$("#rank_5 #rank_level").html(data[4].level);
+					}
+
+					console.log(user.studentId);
+					if(user.studentId === undefined){
+						$(".3noghte").hide();
+						$("#rank_me").hide();
+					}else{
+						var flag = false;
+						for(var i = 0 ; i < Math.min(data.length , 5) ; ++i){
+							if(data[i].studentId === user.studentId){
+								$("#rank_" + (i + 1)).css("color" , "green");
+								flag = true;
+							}
+						}
+						if(flag){
+							 $(".3noghte").hide();
+							 $("#rank_me").hide();
+						}else{
+							for(var i = 0 ; i < data.length ; ++i){
+								if(data[i].studentId === user.studentId){
+									$("#rank_me #rank").html(data[i].rank);
+									$("#rank_me #rank_name").html(data[i].name);
+									$("#rank_me #rank_level").html(data[i].level);
+								}
+							}
+						}
 					}
 
 					engToPersian();
@@ -204,7 +237,7 @@ var checkLogin = function() {
 		contentType: 'application/json',
 		url: '/checkLogin',
 		success: function(data) {
-			console.log(JSON.stringify(data));
+			//console.log(JSON.stringify(data));
 			$('#div_login').bPopup().close();
 
 			var msg = "";
@@ -327,7 +360,7 @@ var engToPersian = function(){
 var paintArray = function(arr){
 	for(var i = 0 ; i < arr.length ; ++i){
 		paint(arr[i]);
-		console.log(arr[i]);
+		//console.log(arr[i]);
 	}
 	setTimeout(function() {   //calls click event after a certain time
 		resetGame();
