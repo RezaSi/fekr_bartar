@@ -1,3 +1,3 @@
 # fekr_bartar
 
-![alt tag](./../project.png)
+![screen shot of game](project.png)
