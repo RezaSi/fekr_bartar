@@ -1,3 +1,3 @@
 # fekr_bartar
 
-![alt tag](project.png)
+![alt tag](../project.png)
