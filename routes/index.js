@@ -115,6 +115,7 @@ exports.checkSelect = function (req, res) {
 
 					//console.log(games[games.length - 1].board + " " + req.body.blockIndex);
 					var indexI = games[games.length - 1].board.indexOf(req.body.blockIndex);
+					var bestLevel = user_.level;
 
 					if(indexI > -1){
 						data.isOk = true;
@@ -169,7 +170,7 @@ exports.checkSelect = function (req, res) {
 						mongoose.model("users").update(
 							{studentId: req.body.studentId , password: req.body.password}, 
 							{
-								$set: {level: games[games.length - 1].level}
+								$set: {level: Math.max(games[games.length - 1].level , bestLevel)}
 							} , function(err , product){
 							if(err) console.log(err);
 							//console.log(product);
