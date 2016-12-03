@@ -9,7 +9,7 @@ function resetGame(){
 
 $(document).ready(function(){
     $('.dooz_box').on('click' , function(){
-        if($(this).css("background-color") == "rgb(135, 118, 108)"){
+        if($(this).css("background-color") == "rgb(135, 118, 108)" && user.studentId !== undefined){
             $(this).css("background-color" , "#8C7E51");
 
 			var data = {};
@@ -52,7 +52,7 @@ $(document).ready(function(){
 
 
 
-					var xx = 10;
+					var xx = 5;
 					$(".meter > span").each(function() {
 						$(this)
 							.stop()
@@ -161,7 +161,6 @@ $(document).ready(function(){
 						$("#rank_5 #rank_level").html(data[4].level);
 					}
 
-					console.log(user.studentId);
 					if(user.studentId === undefined){
 						$(".3noghte").hide();
 						$("#rank_me").hide();
@@ -280,7 +279,7 @@ var checkLogin = function() {
 						resetGame();
 						game = data.game;
 						x = 0;
-						y = 1;
+						y = 2;
 						$(".meter > span").each(function() {
 							$(this)
 								.stop()
