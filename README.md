@@ -1,6 +1,7 @@
 # fekr_bartar
 
-HOW TO RUN
-nodejs index.js
+To run project:
+
+```nodejs index.js```
 
 ![screen shot of game](project.png)
