@@ -3,4 +3,4 @@
 HOW TO RUN
 nodejs index.js
 
-![screen shot of game](http://projectkhayam.ir/test/project.png)
+![screen shot of game](project.png)
