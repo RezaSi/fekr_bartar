@@ -8,7 +8,7 @@
     "ejs": "^2.7.4",
     "express": "^4.18.2",
     "express-session": "^1.17.2",
-    "mongoose": "^6.0.12"
+    "mongoose": "^6.4.6"
   },
   "devDependencies": {},
   "scripts": {
